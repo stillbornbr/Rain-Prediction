@@ -1,0 +1,60 @@
+### Take the data from API
+
+import requests
+url = "someURL"
+querystring = {"q":"City"}
+headers = {
+    'x-key': "Somekey",
+    'x-host': "Somehost"
+    }
+response = requests.request("GET", url, headers=headers, params=querystring)
+var = response.json()
+dic = var['current']
+dic['condition'] = dic['condition']['text']
+
+### Transform the data
+
+input = []
+for x in dic.values():
+    input.append(x)
+
+### Insert transformed data into BigQuery
+
+from google.cloud import bigquery
+from google.oauth2 import service_account
+project_id = 'SomeProjectID'
+client = bigquery.Client(project=project_id)
+table_id = "SomeTableID"
+
+rows_to_insert = [
+    {
+        u"last_updated_epoch": u"{}".format(input[0]),
+        u"last_updated": u"{}".format(input[1]),
+        u"temp_c": u"{}".format(input[2]),
+        u"temp_f": u"{}".format(input[3]),
+        u"is_day": u"{}".format(input[4]),
+        u"condition": u"{}".format(input[5]),
+        u"wind_mph": u"{}".format(input[6]),
+        u"wind_kph": u"{}".format(input[7]),
+        u"wind_degree": u"{}".format(input[8]),
+        u"wind_dir": u"{}".format(input[9]),
+        u"pressure_mb": u"{}".format(input[10]),
+        u"pressure_in": u"{}".format(input[11]),
+        u"precip_mm": u"{}".format(input[12]),
+        u"precip_in": u"{}".format(input[13]),
+        u"humidity": u"{}".format(input[14]),
+        u"cloud": u"{}".format(input[15]),
+        u"feelslike_c": u"{}".format(input[16]),
+        u"feelslike_f": u"{}".format(input[17]),
+        u"vis_km": u"{}".format(input[18]),
+	u"vis_miles": u"{}".format(input[19]),
+        u"uv": u"{}".format(input[20]),
+        u"gust_mph": u"{}".format(input[21]),
+        u"gust_kph": u"{}".format(input[22]),
+    },
+]
+errors = client.insert_rows_json(table_id, rows_to_insert)
+if errors == []:
+    print("New rows have been added.")
+else:
+    print("Encountered errors while inserting rows: {}".format(errors))
