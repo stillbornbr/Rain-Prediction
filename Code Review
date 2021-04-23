@@ -9,7 +9,7 @@ headers = {
     'x-host': "Somehost"
     }
 
-cities = list(("Sao Paulo", "Carapicuiba", "Barueri", "Osasco"))
+cities = list(("Sao Paulo", "Carapicuiba", "London", "New York", "Paris"))
 listdict = list(())
 for i in cities:
     querystring = {"q":"{}".format(i)}
