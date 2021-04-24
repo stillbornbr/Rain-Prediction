@@ -2,6 +2,8 @@
 
 import requests
 import time
+import smtplib
+
 
 url = "someURL"
 headers = {
@@ -69,8 +71,33 @@ for x in listdict:
               
             errors = client.insert_rows_json(table_id, rows_to_insert)
             if errors == []:
-                print("New rows have been added.")
+                hour = time.strftime('%H:%M', time.localtime())
+                    if hour > '12:00' and hour < '12:25':
+                        SendEmail('Rain Prediction','Working Fine - First Check')
+                    elif hour > '23:00' and hour < '23:25':
+                        SendEmail('Rain Prediction','Working Fine - Second Check')       
             else:
+                SendEmail('Rain Prediction','Something Wrong - Please Check VM INSTANCE GOOGLE CLOUD')
                 print("Encountered errors while inserting rows: {}".format(errors))
                 
             input=[]
+
+
+
+def SendEmail(Subject,Message):
+    email = "send@gmail.com"
+    password = "MyPassword"
+    msg = EmailMessage()
+    msg.set_content(Message)
+
+    msg['Subject'] = Subject
+    msg['From'] = "send@gmail.com"
+    msg['To'] = "receive@gmail.com"
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(email, password)
+    server.send_message(msg)
+    
+
+
