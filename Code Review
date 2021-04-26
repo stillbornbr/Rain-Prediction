@@ -76,8 +76,7 @@ for x in listdict:
                     elif hour > '23:00' and hour < '23:25':
                         SendEmail('Rain Prediction','Working Fine - Second Check')       
             else:
-                SendEmail('Rain Prediction','Something Wrong - Please Check VM INSTANCE GOOGLE CLOUD')
-                print("Encountered errors while inserting rows: {}".format(errors))
+                SendEmail('Rain Prediction','Something Wrong - Please Check VM INSTANCE GOOGLE CLOUD, encountered errors while inserting rows: {}'.format(errors))
                 
             input=[]
             
@@ -95,4 +94,3 @@ def SendEmail(Subject,Message):
     server.starttls()
     server.login(email, password)
     server.send_message(msg)
-    
